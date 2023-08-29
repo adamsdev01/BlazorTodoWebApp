@@ -1,4 +1,5 @@
 using BlazorTodoWebApp.Data.Models;
+using BlazorTodoWebApp.Data.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<TodoDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<TodoService>();
 
 var app = builder.Build();
 
