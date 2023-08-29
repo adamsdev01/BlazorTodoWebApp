@@ -13,16 +13,35 @@
                     <EditForm Model="@todoRecord" OnValidSubmit="@HandleValidSubmit">
                         <DataAnnotationsValidator />
                         <ValidationSummary />
-                        <div class="form-group">
-                            <label for="lastName">Last name: </label>
-                            <InputText id="lastName" class="form-control" @bind-Value="@todoRecord.FirstName" placeholder="Enter last name"></InputText>
-                            <ValidationMessage For="@(() => todoRecord.FirstName)" />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Week</label>
+                                <SelectWeeksDropdown></SelectWeeksDropdown>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="firstName">First name: </label>
-                            <InputText id="firstName" class="form-control" @bind-Value="@todoRecord.LastName" placeholder="Enter first name"></InputText>
-                            <ValidationMessage For="@(() => todoRecord.LastName)" />
-                        </div>  
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="lastName">First Name</label>
+                                <InputText class="form-control" @bind-Value="@todoRecord.FirstName" placeholder="First Name"></InputText>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName">Last Name</label>
+                                <InputText class="form-control" @bind-Value="@todoRecord.LastName" placeholder="Last Name"></InputText>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="lastName">Manager </label>
+                                <InputText class="form-control" @bind-Value="@todoRecord.ManagerName" placeholder="Start typing..."></InputText>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName">Manager Department </label>
+                                <InputText class="form-control" @bind-Value="@todoRecord.ManagerDepartmentName"></InputText>
+                            </div>
+                        </div>
+          
                         <br />
                         <br />
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -35,20 +54,29 @@
 }
 @code {
 
-    public bool windowVisible { get; set; }
-
     public TodoRecord todoRecord = new();
 
     public bool ShowDialog { get; set; }
 
+    public IEnumerable<TodoWeek>? todoWeeks { get; set; }
+
     [Parameter]
     public EventCallback<bool> CloseEventCallback { get; set; }
+
+    public SelectWeeksDropdown? weeksDD { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        todoWeeks = _todoService.GetTodoWeeks();
+    }
 
     public void Show()
     {
         ResetDialog();
         ShowDialog = true;
         StateHasChanged();
+        todoRecord.FirstName = "Jane";
+        todoRecord.LastName = "Doe";
     }
 
     public void Close()

@@ -111,5 +111,23 @@ namespace BlazorTodoWebApp.Data.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// To Get all TodoWeeks
+        /// </summary>
+        /// <returns></returns>
+        public List<TodoWeek> GetTodoWeeks()
+        {
+            try
+            {
+                return _dbContext.TodoWeeks.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
     }
 }

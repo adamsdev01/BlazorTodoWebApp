@@ -5,15 +5,25 @@
 <button class="btn btn-primary oi oi-plus" @onclick="() => todoRecordModal.Show()"> New Week Record</button>
 <br />
 <br />
-<QuickGrid Items="TodoRecords"
-    Pagination="pagination">
-    <PropertyColumn Property="@(t => t.FirstName)" Title="First Name" Sortable="true" />
-    <PropertyColumn Property="@(t => t.LastName)" Title="Last Name" Sortable="true" />
-    <!-- Example with a format string -->
-    <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekStartDate)" Title="Start" Format="MM-dd-yyyy" Sortable="true" />
-    <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekEndDate)" Title="End" Format="MM-dd-yyyy" Sortable="true" />
-</QuickGrid>
-<TodoRecordModal @ref="todoRecordModal"></TodoRecordModal>
+@if (TodoRecords == null)
+{
+    <h3>
+        <em>No Records available...</em>
+    </h3>
+}
+else
+{
+    <QuickGrid Items="TodoRecords"
+               Pagination="pagination">
+        <PropertyColumn Property="@(t => t.FirstName)" Title="First Name" Sortable="true" />
+        <PropertyColumn Property="@(t => t.LastName)" Title="Last Name" Sortable="true" />
+        <!-- Example with a format string -->
+        <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekStartDate)" Title="Start" Format="MM-dd-yyyy" Sortable="true" />
+        <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekEndDate)" Title="End" Format="MM-dd-yyyy" Sortable="true" />
+    </QuickGrid>
+    <TodoRecordModal @ref="todoRecordModal"></TodoRecordModal> 
+}
+
 
 @code {
 

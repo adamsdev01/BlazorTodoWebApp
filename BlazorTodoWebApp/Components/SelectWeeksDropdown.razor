@@ -1,0 +1,32 @@
+﻿<select class="custom-select" @onchange="OnValueChanged" title="The Week is required">
+    <option value="Select" selected disabled="disabled">(Select Week)</option>
+    @foreach (var week in TodoWeeks)
+    {
+        <option value="@week.TodoWeekId"> @week.TodoWeekStartDate.Value.ToShortDateString() - @week.TodoWeekEndDate.Value.ToShortDateString()</option>
+    }
+</select>
+
+@code {
+
+    [Parameter]
+    public int  TodoWeekId { get; set; }
+
+    public IEnumerable<TodoWeek>? TodoWeeks { get; set; }
+
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        TodoWeeks = (_todoService.GetTodoWeeks()).ToList();
+    }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+         Value = e.Value.ToString();
+         return ValueChanged.InvokeAsync(Value);
+    }
+}
