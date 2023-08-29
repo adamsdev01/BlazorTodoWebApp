@@ -1,10 +1,31 @@
 ﻿@page "/RecordsGrid"
 
-<h3 style="text-align:center">Todo Records</h3>
-@* <QuickGrid Items="">
-
-</QuickGrid> *@
+<h3 style="text-align:center; text-decoration:underline;">TODO RECORDS</h3>
+<br />
+<button class="btn btn-primary oi oi-plus" @onclick="() => todoRecordModal.Show()"> New Week Record</button>
+<br />
+<br />
+<QuickGrid Items="TodoRecords"
+    Pagination="pagination">
+    <PropertyColumn Property="@(t => t.FirstName)" Title="First Name" Sortable="true" />
+    <PropertyColumn Property="@(t => t.LastName)" Title="Last Name" Sortable="true" />
+    <!-- Example with a format string -->
+    <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekStartDate)" Title="Start" Format="MM-dd-yyyy" Sortable="true" />
+    <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekEndDate)" Title="End" Format="MM-dd-yyyy" Sortable="true" />
+</QuickGrid>
+<TodoRecordModal @ref="todoRecordModal"></TodoRecordModal>
 
 @code {
+
+    public IQueryable<TodoRecord>? TodoRecords { get; set; }
+    PaginationState pagination = new PaginationState { ItemsPerPage = 8 };
+
+    public TodoRecord TodoRecord = new();
+    public TodoRecordModal? todoRecordModal { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TodoRecords = (_todoService.GetTodoRecords().AsQueryable());
+    }
 
 }

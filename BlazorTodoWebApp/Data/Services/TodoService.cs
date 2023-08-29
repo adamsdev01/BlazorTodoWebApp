@@ -13,10 +13,10 @@ namespace BlazorTodoWebApp.Data.Services
         }
 
         /// <summary>
-        /// To Get all TodoRecord details
+        /// To Get all TodoRecords
         /// </summary>
         /// <returns></returns>
-        public List<TodoRecord> GetTodoRecordDetails()
+        public List<TodoRecord> GetTodoRecords()
         {
             try
             {
