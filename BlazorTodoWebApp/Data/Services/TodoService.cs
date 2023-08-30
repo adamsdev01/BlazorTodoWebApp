@@ -129,5 +129,20 @@ namespace BlazorTodoWebApp.Data.Services
         }
 
 
+        /// <summary>
+        /// To Get all Employees
+        /// </summary>
+        /// <returns></returns>
+        public List<Employee> GetEmployees()
+        {
+            try
+            {
+                return _dbContext.Employees.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

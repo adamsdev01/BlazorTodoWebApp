@@ -13,6 +13,7 @@
                     <EditForm Model="@todoRecord" OnValidSubmit="@HandleValidSubmit">
                         <DataAnnotationsValidator />
                         <ValidationSummary />
+
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Week</label>
@@ -34,7 +35,19 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="lastName">Manager </label>
-                                <InputText class="form-control" @bind-Value="@todoRecord.ManagerName" placeholder="Start typing..."></InputText>
+                                <BlazoredTypeahead ConvertMethod="ConvertEmployee" 
+                                    SearchMethod="searchEmployees" 
+                                    @bind-Value="todoRecord.ManagerName">
+                                    <SelectedTemplate Context="selectedName">
+                                        @selectedName
+                                    </SelectedTemplate>
+                                    <ResultTemplate Context="Employee">
+                                        @Employee.FullName
+                                    </ResultTemplate>
+                                    <NotFoundTemplate Context="Employee">
+                                        Sorry, no search results.
+                                    </NotFoundTemplate>
+                                </BlazoredTypeahead>
                             </div>
                             <div class="col-md-6">
                                 <label for="lastName">Manager Department </label>
@@ -63,11 +76,22 @@
     [Parameter]
     public EventCallback<bool> CloseEventCallback { get; set; }
 
-    public SelectWeeksDropdown? weeksDD { get; set; }
+    public List<Employee>? employees { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private string ConvertEmployee(Employee employee) => employee?.FullName;
+
+    protected override void  OnInitialized()
     {
         todoWeeks = _todoService.GetTodoWeeks();
+        employees = _todoService.GetEmployees();
+    }
+
+    protected async Task HandleValidSubmit()
+    {
+        _todoService.AddTodoRecord(todoRecord);
+        ShowDialog = false;
+        await CloseEventCallback.InvokeAsync(true);
+        StateHasChanged();
     }
 
     public void Show()
@@ -90,12 +114,10 @@
         todoRecord = new TodoRecord { };
     }
 
-    protected async Task HandleValidSubmit()
+    private async Task<IEnumerable<Employee>> searchEmployees(string searchText)
     {
-        _todoService.AddTodoRecord(todoRecord);
-        ShowDialog = false;
-        await CloseEventCallback.InvokeAsync(true);
-        StateHasChanged();
+        var result = employees.Where(e => e.FirstName.ToLower().Contains(searchText)).ToList();
+        return result;
     }
 
 }

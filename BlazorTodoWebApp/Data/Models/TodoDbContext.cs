@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorTodoWebApp.Data.Models;
@@ -25,14 +26,15 @@ public partial class TodoDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+       
         modelBuilder.Entity<Employee>(entity =>
         {
             entity.HasKey(e => e.EmployeeId).HasName("PK_EmployeeId");
 
+            entity.Property(e => e.EmployeeId).ValueGeneratedNever();
             entity.Property(e => e.DepartmentName)
                 .HasMaxLength(150)
                 .IsUnicode(false);
-            entity.Property(e => e.EmployeeNumber).HasColumnType("datetime");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
