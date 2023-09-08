@@ -1,4 +1,5 @@
 ﻿using BlazorTodoWebApp.Data.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorTodoWebApp.Data.Services
@@ -128,6 +129,19 @@ namespace BlazorTodoWebApp.Data.Services
             }
         }
 
+        public List<SelectListItem> GetWeeksAvailable()
+        {
+            var weeksAvailable = _dbContext.TodoWeeks.OrderBy(w => w.TodoWeekId)
+                .Where(w => !_dbContext.TodoRecords.Any(t => t.TodoWeekId == w.TodoWeekId))
+                .Select(w => new SelectListItem
+                {
+                    Value = w.TodoWeekId.ToString(),
+                    Text = w.TodoWeekStartDate.Value.ToShortDateString() + " to " + w.TodoWeekEndDate.Value.ToShortDateString()
+
+                }).ToList();
+            return weeksAvailable;
+        }
+
 
         /// <summary>
         /// To Get all Employees
@@ -143,6 +157,31 @@ namespace BlazorTodoWebApp.Data.Services
             {
                 throw;
             }
+        }
+
+        public List<SelectListItem> GetAllEmployees()
+        {
+            var employees = _dbContext.Employees.Select(e => new SelectListItem
+            {
+                Text = e.LastName + "," + e.FirstName,
+                Value = e.LastName + "," + e.FirstName
+            }).ToList();
+
+            return employees;
+        }
+
+        public Employee GetEmployeeData()
+        {
+            int empNum = 111;
+            var emp = _dbContext.Employees.Where(e => e.EmployeeNumber == empNum).Select(e => new Employee
+            {
+                EmployeeNumber = e.EmployeeNumber,
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                DepartmentName = e.DepartmentName,
+            }).FirstOrDefault();
+
+            return emp;
         }
     }
 }

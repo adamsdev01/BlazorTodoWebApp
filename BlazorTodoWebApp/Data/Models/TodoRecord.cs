@@ -9,7 +9,7 @@ public partial class TodoRecord
 
     public int TodoWeekId { get; set; }
 
-    public int EmployeeNumber { get; set; }
+    public int? EmployeeNumber { get; set; }
 
     public string? FirstName { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿<select class="custom-select" @onchange="OnValueChanged" title="The Week is required">
-    <option value="Select" selected disabled="disabled">(Select Week)</option>
+    <option value="Select" selected disabled="disabled">-- Select --</option>
     @foreach (var week in TodoWeeks)
     {
         <option value="@week.TodoWeekId"> @week.TodoWeekStartDate.Value.ToShortDateString() - @week.TodoWeekEndDate.Value.ToShortDateString()</option>

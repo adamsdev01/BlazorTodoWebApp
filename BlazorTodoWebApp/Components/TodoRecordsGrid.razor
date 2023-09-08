@@ -13,13 +13,25 @@
 }
 else
 {
-    <QuickGrid Items="TodoRecords"
-               Pagination="pagination">
-        <PropertyColumn Property="@(t => t.FirstName)" Title="First Name" Sortable="true" />
-        <PropertyColumn Property="@(t => t.LastName)" Title="Last Name" Sortable="true" />
-        <!-- Example with a format string -->
-        <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekStartDate)" Title="Start" Format="MM-dd-yyyy" Sortable="true" />
-        <PropertyColumn Property="@(t => t.TodoWeek.TodoWeekEndDate)" Title="End" Format="MM-dd-yyyy" Sortable="true" />
+    <QuickGrid Items="TodoRecords" Pagination="pagination">
+        <TemplateColumn Title="Week Worked" Sortable="true">
+            @{
+                var item = context as TodoRecord;
+                DateTime? startDate = item.TodoWeek.TodoWeekStartDate;
+                DateTime? endDate = item.TodoWeek.TodoWeekEndDate;
+                string formattedTodoWeekStartDate = startDate.Value.ToShortDateString();
+                string formattedTodoWeekEndDate = endDate.Value.ToShortDateString();
+
+                string dateRange = $"{formattedTodoWeekStartDate} to {formattedTodoWeekEndDate}";
+                <text>@dateRange</text>
+            }
+        </TemplateColumn>
+        <PropertyColumn Property="@(t => t.FullName)" Title="Name" Sortable="true" />
+        <PropertyColumn Property="@(t => t.ManagerDepartmentName)" Title="Manager" />
+        <TemplateColumn Title="Actions">
+            <button type="button" class="oi oi-pencil btn btn-success"></button>
+            <button type="button" class="oi oi-trash btn btn-danger"></button>
+        </TemplateColumn>
     </QuickGrid>
     <TodoRecordModal @ref="todoRecordModal"></TodoRecordModal> 
 }

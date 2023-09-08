@@ -82,12 +82,13 @@
 
     private string ConvertEmployee(Employee employee) => employee?.FullName;
 
-    public Employee employee = new();
+    public Employee? employee { get; set; }
 
     protected override void  OnInitialized()
     {
         todoWeeks = _todoService.GetTodoWeeks();
         employees = _todoService.GetEmployees();
+        employee = _todoService.GetEmployeeData();
     }
 
     protected async Task HandleValidSubmit()
@@ -103,8 +104,10 @@
         ResetDialog();
         ShowDialog = true;
         StateHasChanged();
-        todoRecord.FirstName = "Jane";
-        todoRecord.LastName = "Doe";
+        todoRecord.EmployeeNumber = employee.EmployeeNumber;
+        todoRecord.FirstName = employee.FirstName;
+        todoRecord.LastName = employee.LastName;
+        todoRecord.DepartmentName = employee.DepartmentName;
     }
 
     public void Close()
